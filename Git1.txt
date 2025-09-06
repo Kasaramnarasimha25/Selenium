@@ -1,0 +1,39 @@
+
+package com.syslatech.testsigma.addons.web;
+
+import com.testsigma.sdk.WebAction;
+import com.testsigma.sdk.ApplicationType;
+import com.testsigma.sdk.annotation.Action;
+import com.testsigma.sdk.annotation.Element;
+import lombok.Data;
+import org.openqa.selenium.WebElement;
+
+import java.awt.Toolkit;
+import java.awt.datatransfer.StringSelection;
+
+@Data
+@Action(
+    actionText = "Copy the text from the Element",
+    description = "Copy the text from the element and put it into system clipboard",
+    applicationType = ApplicationType.WEB,
+    useCustomScreenshot = false
+)
+public class MyFirstWebAction extends WebAction {
+
+  @Element(reference = "Element")
+  private com.testsigma.sdk.Element element;
+
+  @Override
+  public com.testsigma.sdk.Result execute() {
+    WebElement webElement = element.getElement();
+    String copiedText = webElement.getText();
+StringSelection selection = new StringSelection(copiedText);
+      Toolkit.getDefaultToolkit().getSystemClipboard().setContents(selection, null);
+
+    Toolkit.getDefaultToolkit().getSystemClipboard()  
+           .setContents(new StringSelection(copiedText), null);
+
+    setSuccessMessage("Copied text to clipboard: \"" + copiedText + "\"");
+    return com.testsigma.sdk.Result.SUCCESS;
+  }
+}
